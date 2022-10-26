@@ -3,6 +3,8 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
+img = cv2.imread("C:/Users/User/OneDrive/Pictures/Arafims.jpg")
+
 #### Rescaling imagees and video frames
 
 def rescaleFrame(frame, scale = 0.5):
@@ -72,18 +74,84 @@ def rescaleFrame(frame, scale = 0.5):
 
 #### Basic functions
 #############################
-img = cv2.imread("C:/Users/User/OneDrive/Pictures/Arafims.jpg")
+# img = cv2.imread("C:/Users/User/OneDrive/Pictures/Arafims.jpg")
 
-## Convert to grayscale
+# ## Convert to grayscale
+# gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+# cv2.imshow('Grayscale', gray)
+
+# ## Gaussian Blur
+# blur = cv2.GaussianBlur(img, (3,3), cv2.BORDER_DEFAULT)
+# cv2.imshow('Blur', blur)
+
+# ## Canny Edge Detector
+# canny = cv2.Canny(blur, 175, 175)
+# cv2.imshow('Canny', canny)
+
+# ## Cropping
+# crop = img[:500, :500]
+# cv2.imshow('Crop', crop)
+
+# cv2.waitKey()
+#######################################
+
+########### Image Transformations
+####################################
+## Translation
+def translate(img, tx, ty):
+    transMat = np.float32([[1, 0, tx], [0, 1, ty]])
+    width = img.shape[1] 
+    height = img.shape[0]
+    dimensions = (width, height)
+    return cv2.warpAffine(img, transMat, dimensions)
+
+translated = translate(img, 100, 100) # Right and down by 100 px
+translated2 = translate(img, -100, 100) # Left and down by 100 px
+
+# cv2.imshow('Translated', translated2)
+
+## Rotation
+def rotate(img, angle, rotation_point = None):
+    (height, width) = img.shape[:2] # We don't need the number of channels
+    dimensions = (width, height)
+    if rotation_point == None:
+        rotation_point = (width // 2, height // 2)
+    
+    rotationMat = cv2.getRotationMatrix2D(rotation_point, angle, 1.0)
+    return cv2.warpAffine(img, rotationMat, dimensions)
+
+# rotated = rotate(img, 50, (20, 20))
+# cv2.imshow('Rotated', rotated)
+
+# ## Resizing
+# resized = cv2.resize(img, (500,500), interpolation=cv2.INTER_AREA)
+# cv2.imshow('Resized', resized)
+
+# ## Flipping
+# flipped = cv2.flip(img, -1)
+# cv2.imshow('Flipped', flipped)
+
+
+########### Contour Detection
+####################################
+cv2.imshow('Arafims', img)
+
+blank = np.zeros(img.shape, dtype='uint8')
+# cv2.imshow('Blank', blank)
+
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-cv2.imshow('Grayscale', gray)
+# cv2.imshow('Gray', gray)
 
-## Gaussian Blur
-blur = cv2.GaussianBlur(img, (3,3), cv2.BORDER_DEFAULT)
+blur = cv2.GaussianBlur(gray, (3,3), cv2.BORDER_DEFAULT)
 cv2.imshow('Blur', blur)
 
-## Canny Edge Detector
-canny = cv2.Canny(blur, 175, 175)
-cv2.imshow('Canny', canny)
+canny = cv2.Canny(blur, 125, 175)
+cv2.imshow('Canny Edges', canny)
 
+contours, heirarchy = cv2.findContours(canny, cv2.RETR_LIST, cv2.CHAIN_APPROX_NONE)
+cv2.drawContours(img, contours, -1, (0,0,255))
+cv2.imshow('Contours Drawn', img)
+
+# Print number of contours
+print("Number of contours: " + str(len(contours)))
 cv2.waitKey()
