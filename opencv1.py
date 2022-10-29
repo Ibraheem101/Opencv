@@ -136,22 +136,61 @@ def rotate(img, angle, rotation_point = None):
 ####################################
 cv2.imshow('Arafims', img)
 
-blank = np.zeros(img.shape, dtype='uint8')
-# cv2.imshow('Blank', blank)
+# blank = np.zeros(img.shape, dtype='uint8')
+# # cv2.imshow('Blank', blank)
 
-gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-# cv2.imshow('Gray', gray)
+# gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+# # cv2.imshow('Gray', gray)
 
-blur = cv2.GaussianBlur(gray, (3,3), cv2.BORDER_DEFAULT)
-cv2.imshow('Blur', blur)
+# blur = cv2.GaussianBlur(gray, (3,3), cv2.BORDER_DEFAULT)
+# cv2.imshow('Blur', blur)
 
-canny = cv2.Canny(blur, 125, 175)
-cv2.imshow('Canny Edges', canny)
+# canny = cv2.Canny(blur, 125, 175)
+# cv2.imshow('Canny Edges', canny)
 
-contours, heirarchy = cv2.findContours(canny, cv2.RETR_LIST, cv2.CHAIN_APPROX_NONE)
-cv2.drawContours(img, contours, -1, (0,0,255))
-cv2.imshow('Contours Drawn', img)
+# contours, heirarchy = cv2.findContours(canny, cv2.RETR_LIST, cv2.CHAIN_APPROX_NONE)
+# cv2.drawContours(img, contours, -1, (0,0,255))
+# cv2.imshow('Contours Drawn', img)
 
-# Print number of contours
-print("Number of contours: " + str(len(contours)))
+# # Print number of contours
+# print("Number of contours: " + str(len(contours)))
+cv2.waitKey()
+#########################
+
+#### Colour spaces
+########################
+# img_lab = cv2.cvtColor(img, cv2.COLOR_BGR2LAB)
+# cv2.imshow('Lab', img_lab)
+
+# img_hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+# cv2.imshow('HSV', img_hsv)
+
+# img_lab = cv2.cvtColor(img, cv2.COLOR_BGR2)
+# cv2.imshow('Lab', img_lab)
+
+cv2.waitKey()
+#######################
+
+#### Color channels
+#########################
+
+blank = np.zeros(img.shape[:2], dtype='uint8')
+b, g, r = cv2.split(img)
+
+blue = cv2.merge([b, blank, blank])
+green = cv2.merge([blank, g, blank])
+red = cv2.merge([blank, blank, r])
+
+## Display channels in grayscale
+# cv2.imshow('Blue', b)
+# cv2.imshow('Green', g)
+# cv2.imshow('Red', r)
+
+## View channels in color
+cv2.imshow('Blue', blue)
+cv2.imshow('Green', green)
+cv2.imshow('Red', red)
+
+# merged = cv2.merge([b, g, r])
+# cv2.imshow('Merged', merged)
 cv2.waitKey()
