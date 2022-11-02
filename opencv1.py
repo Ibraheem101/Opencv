@@ -154,7 +154,7 @@ cv2.imshow('Arafims', img)
 
 # # Print number of contours
 # print("Number of contours: " + str(len(contours)))
-cv2.waitKey()
+# cv2.waitKey()
 #########################
 
 #### Colour spaces
@@ -168,7 +168,7 @@ cv2.waitKey()
 # img_lab = cv2.cvtColor(img, cv2.COLOR_BGR2)
 # cv2.imshow('Lab', img_lab)
 
-cv2.waitKey()
+# cv2.waitKey()
 #######################
 
 #### Color channels
@@ -187,10 +187,122 @@ red = cv2.merge([blank, blank, r])
 # cv2.imshow('Red', r)
 
 ## View channels in color
-cv2.imshow('Blue', blue)
-cv2.imshow('Green', green)
-cv2.imshow('Red', red)
+# cv2.imshow('Blue', blue)
+# cv2.imshow('Green', green)
+# cv2.imshow('Red', red)
 
 # merged = cv2.merge([b, g, r])
 # cv2.imshow('Merged', merged)
+# cv2.waitKey()
+
+#### Blurring
+############################
+
+## Gaussian blur
+# gaussian = cv2.GaussianBlur(img, (3, 3), 0)
+# cv2.imshow('Gaussian', gaussian)
+
+# ## Average blur
+# average = cv2.blur(img, (3, 3))
+# cv2.imshow('Average', average)
+
+# ## Median blur
+# median = cv2.medianBlur(img, 3)
+# cv2.imshow('Median', median)
+
+# bilateral = cv2.bilateralFilter(img, 10, 15, 15)
+# cv2.imshow('Bilateral', bilateral)
+
+# cv2.waitKey()
+################################
+
+#### Bitwise Operations
+##############################
+
+# blank = np.zeros((500, 500), dtype='uint8')
+# blank2 = np.zeros((500, 500), dtype='uint8')
+
+# # cv2.line(blank, (250, 30), (30, 470), 255)
+# # cv2.line(blank, (250, 30), (470, 470), 255)
+# # cv2.line(blank, (30, 470), (470, 470), 255)
+
+# # Fill triangle
+# pts = np.array([[250, 30], [30, 470], [470, 470]])
+# cv2.fillPoly(blank, [pts], color=255)
+
+# cv2.circle(blank2, (250, 250), 200, 255, -1)
+
+# cv2.imshow('Blank', blank)
+# cv2.imshow('Blank2', blank2)
+
+# ## Bitwise AND
+# And = cv2.bitwise_and(blank, blank2)
+# cv2.imshow('AND', And)
+
+# ## Bitwise OR
+# Or = cv2.bitwise_or(blank, blank2)
+# cv2.imshow('OR', Or)
+
+# ## Bitwise XOR
+# xor = cv2.bitwise_xor(blank, blank2)
+# cv2.imshow('XOR', xor)
+
+# ## Bitwise NOT
+# Not = cv2.bitwise_not(blank)
+# cv2.imshow('Not', Not)
+###############################
+
+#### Masking
+###############################
+# blank_mask = np.zeros(img.shape[:2], dtype = 'uint8')
+# mask = cv2.circle(blank_mask, (250, 250), 200, 255, -1)
+
+# masked_image = cv2.bitwise_and(img, img, mask = mask)
+# cv2.imshow('Masked Image', masked_image)
+
+#### Histograms
+##############################
+## Gray Histogram
+gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+gray_hist = cv2.calcHist([gray], [0], None, [256], [0, 256])
+
+plt.figure()
+plt.title('Histogram')
+plt.xlabel('Bins')
+plt.ylabel('Pixels')
+plt.xlim(0, 256)
+plt.plot(gray_hist)
+plt.show()
+
+## Color Histogram
+colors = ('b', 'g', 'r')
+for i, color in enumerate(colors):
+    color_hist = cv2.calcHist([img], [i], None, [256], [0, 256])
+    plt.title('Color Histogram')
+    plt.xlabel('Bins')
+    plt.ylabel('Pixels')
+    plt.xlim(0, 256)
+    plt.plot(color_hist, color = color)
+plt.show()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 cv2.waitKey()
