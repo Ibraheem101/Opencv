@@ -4,6 +4,10 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 img = cv2.imread("C:/Users/User/OneDrive/Pictures/Arafims.jpg")
+gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+img2 = cv2.imread("C:/Users/User/OneDrive/Pictures/Ibraheemk.jpg")
+gray2 = cv2.cvtColor(img2, cv2.COLOR_BGR2GRAY)
 
 #### Rescaling imagees and video frames
 
@@ -263,33 +267,87 @@ red = cv2.merge([blank, blank, r])
 #### Histograms
 ##############################
 ## Gray Histogram
-gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-gray_hist = cv2.calcHist([gray], [0], None, [256], [0, 256])
+# gray_hist = cv2.calcHist([gray], [0], None, [256], [0, 256])
 
-plt.figure()
-plt.title('Histogram')
-plt.xlabel('Bins')
-plt.ylabel('Pixels')
-plt.xlim(0, 256)
-plt.plot(gray_hist)
-plt.show()
+# plt.figure()
+# plt.title('Histogram')
+# plt.xlabel('Bins')
+# plt.ylabel('Pixels')
+# plt.xlim(0, 256)
+# plt.plot(gray_hist)
+# plt.show()
 
-## Color Histogram
-colors = ('b', 'g', 'r')
-for i, color in enumerate(colors):
-    color_hist = cv2.calcHist([img], [i], None, [256], [0, 256])
-    plt.title('Color Histogram')
-    plt.xlabel('Bins')
-    plt.ylabel('Pixels')
-    plt.xlim(0, 256)
-    plt.plot(color_hist, color = color)
-plt.show()
+# ## Color Histogram
+# colors = ('b', 'g', 'r')
+# for i, color in enumerate(colors):
+#     color_hist = cv2.calcHist([img], [i], None, [256], [0, 256])
+#     plt.title('Color Histogram')
+#     plt.xlabel('Bins')
+#     plt.ylabel('Pixels')
+#     plt.xlim(0, 256)
+#     plt.plot(color_hist, color = color)
+# plt.show()
+
+#######################################
+
+#### Thresholding/ Binarizing
+#############################
+## Simple thresholding
+# threshold, thresh = cv2.threshold(gray, 150, 255, cv2.THRESH_BINARY)
+# cv2.imshow('Simple threshold', thresh)
+
+# threshold, thresh = cv2.threshold(gray, 150, 255, cv2.THRESH_BINARY)
+# cv2.imshow('Simple threshold inverse', thresh)
+# threshold, thresh_inv = cv2.threshold(gray2, 150, 255, cv2.THRESH_BINARY_INV)
+# cv2.imshow('Simple threshold inverse', thresh_inv)
+
+# ## Adaptive thresholding
+# adaptive_thresh = cv2.adaptiveThreshold(gray2, 255, cv2.ADAPTIVE_THRESH_MEAN_C, 
+#                                         cv2.THRESH_BINARY, 11, 3)
+# cv2.imshow('Adaptive Threshold', adaptive_thresh)
+
+# adaptive_thresh_gaussian = cv2.adaptiveThreshold(gray2, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, 
+#                                         cv2.THRESH_BINARY, 11, 3)
+# cv2.imshow('Adaptive Threshold Gaussian', adaptive_thresh_gaussian)
+
+#####################################
+
+#### Edge detection
+##############################
+## Laplacian edge
+lap = cv2.Laplacian(img, cv2.CV_64F)
+lap = np.uint8(np.absolute(lap))
+# cv2.imshow('Laplacian', lap)
+
+## Sobel edge detector
+# Computes in x and y directions
+sobelx = cv2.Sobel(gray, cv2.CV_64F, 1, 0)
+sobely = cv2.Sobel(gray, cv2.CV_64F, 0, 1)
+# cv2.imshow('Sobelx', sobelx)
+# cv2.imshow('Sobely', sobely)
+
+sobel = cv2.bitwise_or(sobely, sobelx)
+# cv2.imshow('Sobel combined', sobel)
+##########################################
+
+#### Face Detection
+####################################
+## Haar Cascades
+person = cv2.imread("C:/Users/User/OneDrive/Pictures/Ibraheemk.jpg")
+people = cv2.imread("C:/Users/User/OneDrive/Pictures/people.jpg")
+
+gray_person = cv2.cvtColor(person, cv2.COLOR_BGR2GRAY)
+gray_people = cv2.cvtColor(people, cv2.COLOR_BGR2GRAY)
 
 
+haar_cascade = cv2.CascadeClassifier('C:/Users/User/OneDrive/Programming books/Opencv/haar_face.xml')
+faces_rect = haar_cascade.detectMultiScale(people, scaleFactor = 1.1, minNeighbors = 2)
 
+print(len(faces_rect))
+for (x, y, w, h) in faces_rect:
+    cv2.rectangle(people, (x, y), (x+w, y+h), (0,0,255), thickness=2)
 
-
-
+cv2.imshow('Faces', people)
 
 
 
