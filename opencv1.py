@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 import pandas as pd
+import imutils
 import matplotlib.pyplot as plt
 
 img = cv2.imread("C:/Users/User/OneDrive/Pictures/Arafims.jpg")
@@ -124,8 +125,12 @@ def rotate(img, angle, rotation_point = None):
     rotationMat = cv2.getRotationMatrix2D(rotation_point, angle, 1.0)
     return cv2.warpAffine(img, rotationMat, dimensions)
 
-# rotated = rotate(img, 50, (20, 20))
-# cv2.imshow('Rotated', rotated)
+rotated = rotate(img, 50, (20, 20))
+cv2.imshow('Rotated', rotated)
+
+## Rotating an image while preserving boundaries
+rotated2 = imutils.rotate_bound(img, 50)
+cv2.imshow('Rotate Bound', rotated2)
 
 # ## Resizing
 # resized = cv2.resize(img, (500,500), interpolation=cv2.INTER_AREA)
@@ -267,25 +272,25 @@ red = cv2.merge([blank, blank, r])
 #### Histograms
 ##############################
 ## Gray Histogram
-# gray_hist = cv2.calcHist([gray], [0], None, [256], [0, 256])
+gray_hist = cv2.calcHist([gray], [0], None, [256], [0, 256])
 
-# plt.figure()
-# plt.title('Histogram')
-# plt.xlabel('Bins')
-# plt.ylabel('Pixels')
-# plt.xlim(0, 256)
-# plt.plot(gray_hist)
+plt.figure()
+plt.title('Histogram')
+plt.xlabel('Bins')
+plt.ylabel('Pixels')
+plt.xlim(0, 256)
+plt.plot(gray_hist)
 # plt.show()
 
 # ## Color Histogram
-# colors = ('b', 'g', 'r')
-# for i, color in enumerate(colors):
-#     color_hist = cv2.calcHist([img], [i], None, [256], [0, 256])
-#     plt.title('Color Histogram')
-#     plt.xlabel('Bins')
-#     plt.ylabel('Pixels')
-#     plt.xlim(0, 256)
-#     plt.plot(color_hist, color = color)
+colors = ('b', 'g', 'r')
+for i, color in enumerate(colors):
+    color_hist = cv2.calcHist([img], [i], None, [256], [0, 256])
+    plt.title('Color Histogram')
+    plt.xlabel('Bins')
+    plt.ylabel('Pixels')
+    plt.xlim(0, 256)
+    plt.plot(color_hist, color = color)
 # plt.show()
 
 #######################################
@@ -293,21 +298,21 @@ red = cv2.merge([blank, blank, r])
 #### Thresholding/ Binarizing
 #############################
 ## Simple thresholding
-# threshold, thresh = cv2.threshold(gray, 150, 255, cv2.THRESH_BINARY)
+threshold, thresh = cv2.threshold(gray, 150, 255, cv2.THRESH_BINARY)
 # cv2.imshow('Simple threshold', thresh)
 
-# threshold, thresh = cv2.threshold(gray, 150, 255, cv2.THRESH_BINARY)
+threshold, thresh = cv2.threshold(gray, 150, 255, cv2.THRESH_BINARY)
 # cv2.imshow('Simple threshold inverse', thresh)
-# threshold, thresh_inv = cv2.threshold(gray2, 150, 255, cv2.THRESH_BINARY_INV)
+threshold, thresh_inv = cv2.threshold(gray2, 150, 255, cv2.THRESH_BINARY_INV)
 # cv2.imshow('Simple threshold inverse', thresh_inv)
 
-# ## Adaptive thresholding
-# adaptive_thresh = cv2.adaptiveThreshold(gray2, 255, cv2.ADAPTIVE_THRESH_MEAN_C, 
-#                                         cv2.THRESH_BINARY, 11, 3)
+## Adaptive thresholding
+adaptive_thresh = cv2.adaptiveThreshold(gray2, 255, cv2.ADAPTIVE_THRESH_MEAN_C, 
+                                        cv2.THRESH_BINARY, 11, 3)
 # cv2.imshow('Adaptive Threshold', adaptive_thresh)
 
-# adaptive_thresh_gaussian = cv2.adaptiveThreshold(gray2, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, 
-#                                         cv2.THRESH_BINARY, 11, 3)
+adaptive_thresh_gaussian = cv2.adaptiveThreshold(gray2, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, 
+                                        cv2.THRESH_BINARY, 11, 3)
 # cv2.imshow('Adaptive Threshold Gaussian', adaptive_thresh_gaussian)
 
 #####################################
@@ -347,7 +352,9 @@ print(len(faces_rect))
 for (x, y, w, h) in faces_rect:
     cv2.rectangle(people, (x, y), (x+w, y+h), (0,0,255), thickness=2)
 
-cv2.imshow('Faces', people)
+# cv2.imshow('Faces', people)
+##################################
+
 
 
 
