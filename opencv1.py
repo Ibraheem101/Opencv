@@ -5,6 +5,7 @@ import imutils
 import matplotlib.pyplot as plt
 
 img = cv2.imread("C:/Users/User/OneDrive/Pictures/Arafims.jpg")
+spectrum = cv2.imread("C:/Users/User/OneDrive/Pictures/spectrum.jpg")
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
 img2 = cv2.imread("C:/Users/User/OneDrive/Pictures/Ibraheemk.jpg")
@@ -13,12 +14,12 @@ gray2 = cv2.cvtColor(img2, cv2.COLOR_BGR2GRAY)
 #### Rescaling imagees and video frames
 
 def rescaleFrame(frame, scale = 0.5):
-    width = int(frame.shape[1] * scale)
-    height = int(frame.shape[0] * scale)
+	width = int(frame.shape[1] * scale)
+	height = int(frame.shape[0] * scale)
 
-    dimensions = (width, height)
-    
-    return cv2.resize(frame, dimensions, interpolation = cv2.INTER_AREA)
+	dimensions = (width, height)
+	
+	return cv2.resize(frame, dimensions, interpolation = cv2.INTER_AREA)
 
 ########### Read Image
 #################################
@@ -104,11 +105,11 @@ def rescaleFrame(frame, scale = 0.5):
 ####################################
 ## Translation
 def translate(img, tx, ty):
-    transMat = np.float32([[1, 0, tx], [0, 1, ty]])
-    width = img.shape[1] 
-    height = img.shape[0]
-    dimensions = (width, height)
-    return cv2.warpAffine(img, transMat, dimensions)
+	transMat = np.float32([[1, 0, tx], [0, 1, ty]])
+	width = img.shape[1] 
+	height = img.shape[0]
+	dimensions = (width, height)
+	return cv2.warpAffine(img, transMat, dimensions)
 
 translated = translate(img, 100, 100) # Right and down by 100 px
 translated2 = translate(img, -100, 100) # Left and down by 100 px
@@ -117,20 +118,20 @@ translated2 = translate(img, -100, 100) # Left and down by 100 px
 
 ## Rotation
 def rotate(img, angle, rotation_point = None):
-    (height, width) = img.shape[:2] # We don't need the number of channels
-    dimensions = (width, height)
-    if rotation_point == None:
-        rotation_point = (width // 2, height // 2)
-    
-    rotationMat = cv2.getRotationMatrix2D(rotation_point, angle, 1.0)
-    return cv2.warpAffine(img, rotationMat, dimensions)
+	(height, width) = img.shape[:2] # We don't need the number of channels
+	dimensions = (width, height)
+	if rotation_point == None:
+		rotation_point = (width // 2, height // 2)
+	
+	rotationMat = cv2.getRotationMatrix2D(rotation_point, angle, 1.0)
+	return cv2.warpAffine(img, rotationMat, dimensions)
 
 rotated = rotate(img, 50, (20, 20))
-cv2.imshow('Rotated', rotated)
+# cv2.imshow('Rotated', rotated)
 
 ## Rotating an image while preserving boundaries
 rotated2 = imutils.rotate_bound(img, 50)
-cv2.imshow('Rotate Bound', rotated2)
+# cv2.imshow('Rotate Bound', rotated2)
 
 # ## Resizing
 # resized = cv2.resize(img, (500,500), interpolation=cv2.INTER_AREA)
@@ -285,12 +286,12 @@ plt.plot(gray_hist)
 # ## Color Histogram
 colors = ('b', 'g', 'r')
 for i, color in enumerate(colors):
-    color_hist = cv2.calcHist([img], [i], None, [256], [0, 256])
-    plt.title('Color Histogram')
-    plt.xlabel('Bins')
-    plt.ylabel('Pixels')
-    plt.xlim(0, 256)
-    plt.plot(color_hist, color = color)
+	color_hist = cv2.calcHist([img], [i], None, [256], [0, 256])
+	plt.title('Color Histogram')
+	plt.xlabel('Bins')
+	plt.ylabel('Pixels')
+	plt.xlim(0, 256)
+	plt.plot(color_hist, color = color)
 # plt.show()
 
 #######################################
@@ -308,11 +309,11 @@ threshold, thresh_inv = cv2.threshold(gray2, 150, 255, cv2.THRESH_BINARY_INV)
 
 ## Adaptive thresholding
 adaptive_thresh = cv2.adaptiveThreshold(gray2, 255, cv2.ADAPTIVE_THRESH_MEAN_C, 
-                                        cv2.THRESH_BINARY, 11, 3)
+										cv2.THRESH_BINARY, 11, 3)
 # cv2.imshow('Adaptive Threshold', adaptive_thresh)
 
 adaptive_thresh_gaussian = cv2.adaptiveThreshold(gray2, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, 
-                                        cv2.THRESH_BINARY, 11, 3)
+										cv2.THRESH_BINARY, 11, 3)
 # cv2.imshow('Adaptive Threshold Gaussian', adaptive_thresh_gaussian)
 
 #####################################
@@ -340,28 +341,45 @@ sobel = cv2.bitwise_or(sobely, sobelx)
 ## Haar Cascades
 person = cv2.imread("C:/Users/User/OneDrive/Pictures/Ibraheemk.jpg")
 people = cv2.imread("C:/Users/User/OneDrive/Pictures/people.jpg")
+people2 = cv2.imread("C:/Users/User/OneDrive/Pictures/nikah.jpg")
 
 gray_person = cv2.cvtColor(person, cv2.COLOR_BGR2GRAY)
 gray_people = cv2.cvtColor(people, cv2.COLOR_BGR2GRAY)
 
 
 haar_cascade = cv2.CascadeClassifier('C:/Users/User/OneDrive/Programming books/Opencv/haar_face.xml')
-faces_rect = haar_cascade.detectMultiScale(people, scaleFactor = 1.1, minNeighbors = 2)
+faces_rect = haar_cascade.detectMultiScale(people2, scaleFactor = 1.1, minNeighbors = 5)
 
 print(len(faces_rect))
 for (x, y, w, h) in faces_rect:
-    cv2.rectangle(people, (x, y), (x+w, y+h), (0,0,255), thickness=2)
+	cv2.rectangle(people2, (x, y), (x+w, y+h), (0,0,255), thickness=2)
 
-# cv2.imshow('Faces', people)
+cv2.imshow('Faces', people2)
 ##################################
 
+#### Color detection
+############################
+# Define list of boundaries
+# boundaries = [
+# 	([5, 5, 255], [5, 78, 255]),
+# 	([5, 255, 182], [195, 255, 5]),
+# 	([255, 195, 5], [255, 5, 126])
+# ]
+# blank2 = np.zeros((500, 500, 3), dtype='uint8')
+# blank2[:] = (0,0,255)
+# cv2.imshow('red', blank2)
 
-
-
-
-
-
-
+# for (lower, upper) in boundaries:
+# 	# create NumPy arrays from the boundaries
+# 	lower = np.array(lower)
+# 	upper = np.array(upper)
+# 	# find the colors within the specified boundaries and apply
+# 	# the mask
+# 	mask = cv2.inRange(img2, lower, upper)
+# 	output = cv2.bitwise_and(img2, img2, mask = mask)
+# 	# show the images
+# 	# cv2.imshow("images", np.hstack((img2, output)))
+# 	# cv2.waitKey()
 
 
 
