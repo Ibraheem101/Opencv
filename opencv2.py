@@ -41,7 +41,8 @@ while True:
     isTrue, frame = capture2.read()
     cv2.imshow('frame', frame)
 
-    hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+    blur = cv2.GaussianBlur(frame, (5, 5), cv2.BORDER_DEFAULT)
+    hsv = cv2.cvtColor(blur, cv2.COLOR_BGR2HSV)
     #Let's 
     h_position = cv2.getTrackbarPos('H', 'frame')
     s_position = cv2.getTrackbarPos('S', 'frame')
