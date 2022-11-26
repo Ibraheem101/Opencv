@@ -300,7 +300,7 @@ for i, color in enumerate(colors):
 #############################
 ## Simple thresholding
 threshold, thresh = cv2.threshold(gray, 150, 255, cv2.THRESH_BINARY)
-# cv2.imshow('Simple threshold', thresh)
+cv2.imshow('Simple threshold', thresh)
 
 threshold, thresh = cv2.threshold(gray, 150, 255, cv2.THRESH_BINARY)
 # cv2.imshow('Simple threshold inverse', thresh)
@@ -354,7 +354,7 @@ print(len(faces_rect))
 for (x, y, w, h) in faces_rect:
 	cv2.rectangle(people2, (x, y), (x+w, y+h), (0,0,255), thickness=2)
 
-cv2.imshow('Faces', people2)
+# cv2.imshow('Faces', people2)
 ##################################
 
 #### Color detection
