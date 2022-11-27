@@ -76,14 +76,26 @@ pts2 = np.float32([[0, 0], [400, 0], [0, 700], [400, 700]])
 matrix = cv2.getPerspectiveTransform(pts1, pts2)
 result = cv2.warpPerspective(perspective, matrix, (400, 700))
 
-cv2.imshow('Result', result)
-
-print(perspective.shape)
-
+# cv2.imshow('Result', result)
+# print(perspective.shape)
 
 
 
+#### Affine transformation
+grid = cv2.imread("C:/Users/User/OneDrive/Pictures/grid.png")
+cv2.circle(grid, (55, 75), 6, (0,0,255), -1)
+cv2.circle(grid, (410, 75), 6, (0,0,255), -1)
+cv2.circle(grid, (55, 580), 6, (0,0,255), -1)
 
+pts1 = np.float32([[55, 75], [410, 75], [55, 580]])
+pts2 = np.float32([[55, 75], [410, 75], [200, 580]])
+
+aff_matrix = cv2.getAffineTransform(pts1, pts2)
+aff_result = cv2.warpAffine(grid, aff_matrix, (grid.shape[1], grid.shape[0]))
+cv2.imshow('Affine', aff_result)
+
+cv2.imshow('grid', grid)
+print(grid.shape)
 
 
 
