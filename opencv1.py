@@ -354,7 +354,8 @@ print(len(faces_rect))
 for (x, y, w, h) in faces_rect:
 	cv2.rectangle(people2, (x, y), (x+w, y+h), (0,0,255), thickness=2)
 
-# cv2.imshow('Faces', people2)
+cv2.imshow('Faces', people2)
+# cv2.imwrite('nikah_faces.jpg', people2)
 ##################################
 
 #### Color detection
