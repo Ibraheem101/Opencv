@@ -1,4 +1,9 @@
 # Pysource
+## Trackbars
+## Object detection using HSV Color space and trackbars
+## Perspective Transformations
+## Affine Transformations
+
 import os
 import cv2
 import numpy as np
@@ -92,13 +97,17 @@ pts2 = np.float32([[55, 75], [410, 75], [200, 580]])
 
 aff_matrix = cv2.getAffineTransform(pts1, pts2)
 aff_result = cv2.warpAffine(grid, aff_matrix, (grid.shape[1], grid.shape[0]))
-cv2.imshow('Affine', aff_result)
+# cv2.imshow('Affine', aff_result)
 
-cv2.imshow('grid', grid)
+# cv2.imshow('grid', grid)
 print(grid.shape)
 
 
-
+#### Edge Detection
+bumblebee = cv2.imread("C:/Users/User/OneDrive/Pictures/Bumblebee.jpg")
+bumblebee_resized = cv2.resize(bumblebee, (1400, 800))
+canny = cv2.Canny(cv2.GaussianBlur(cv2.cvtColor(bumblebee_resized, cv2.COLOR_BGR2GRAY), (3, 3), cv2.BORDER_DEFAULT), 50, 75)
+cv2.imshow('Canny', canny)
 
 
 cv2.waitKey()
