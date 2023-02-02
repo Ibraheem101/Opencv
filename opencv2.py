@@ -3,6 +3,8 @@
 ## Object detection using HSV Color space and trackbars
 ## Perspective Transformations
 ## Affine Transformations
+## Edge detection
+## Line Detection with Hough Transform
 
 import os
 import cv2
@@ -107,7 +109,61 @@ print(grid.shape)
 bumblebee = cv2.imread("C:/Users/User/OneDrive/Pictures/Bumblebee.jpg")
 bumblebee_resized = cv2.resize(bumblebee, (1400, 800))
 canny = cv2.Canny(cv2.GaussianBlur(cv2.cvtColor(bumblebee_resized, cv2.COLOR_BGR2GRAY), (3, 3), cv2.BORDER_DEFAULT), 50, 75)
-cv2.imshow('Canny', canny)
+# cv2.imshow('Canny', canny)
+
+
+#### Line Detection with Hough Transform
+line = cv2.imread("C:/Users/User/OneDrive/Pictures/broken line.png")
+gray = cv2.cvtColor(line, cv2.COLOR_BGR2GRAY)
+canny_line = cv2.Canny(gray, 50, 75)
+# cv2.imshow('line', canny_line)
+
+lines = cv2.HoughLinesP(canny_line, 1, np.pi/180, 5, maxLineGap = 80)
+# print(lines)
+
+for linex in lines:
+    x1, y1, x2, y2 = linex[0]
+    cv2.line(line, (x1, y1), (x2, y2), (0, 0, 255), 4)
+# cv2.imshow('line', line)
+
+## Detect lanes in a video
+video = cv2.VideoCapture("C:/Users/User/Videos/4K Video Downloader/Sheikh Zayed Road   Dubai UAE.mp4")
+while True:
+    _, frame = video.read()
+    # cv2.imshow('frame', frame)
+
+    low_lane = np.array([190, 188, 192])
+    max_lane = np.array([209, 205, 199])
+
+    mask = cv2.inRange(frame, low_lane, max_lane)
+    lane_edge = cv2.Canny(mask, 50, 75)
+    cv2.imshow('edge', lane_edge)
+
+    lines = cv2.HoughLinesP(lane_edge, 1, np.pi/180, 35, maxLineGap=30)
+    if lines is not None:
+        for linex in lines:
+            x1, y1, x2, y2 = linex[0]
+            cv2.line(frame, (x1, y1), (x2, y2), (0, 255, 0), 6)
+    # cv2.imshow('frame', frame)
+
+
+    if cv2.waitKey(20) & 0xFF == ord('q'):
+        break
+video.release()
+cv2.destroyAllWindows()
+    
+lane = cv2.imread("C:/Users/User/OneDrive/Pictures/lane.png")
+# cv2.imshow('lane', lane)
+
+
+
+
+
+
+
+
+
+
 
 
 cv2.waitKey()
